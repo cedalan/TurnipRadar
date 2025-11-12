@@ -25,6 +25,10 @@ CHECK_INTERVAL = 120 #How many seconds between each check
 #Set this to false if you do not want to check for posts about daisy mae selling turnips
 DO_DAISY_MAE_CHECK = True
 
+#Set til to true if you only want to send notification for posts under max age
+ONLY_SEND_NOTIFICATION_IF_REALLY_NEW = True
+MAX_POST_AGE = 60 #Max post age in minutes
+
 def load_seen_posts():
     """
     Load all seen posts from file
@@ -72,6 +76,20 @@ def is_turnip_related(title):
 
     return any(keyword in title_lower for keyword in keywords)
 
+def is_post_recent(created_time):
+    """
+    Checks if post was created withing MAX_POST_AGE minutes
+
+    Returns:
+    Bool indicating if post is recent enough
+    """
+
+    post_time = datetime.fromtimestamp(created_time)
+    current_time = datetime.now()
+    time_diff = current_time - post_time
+    logging.info(f"time_diff: {time_diff.total_seconds()}")
+    return time_diff.total_seconds() >= (MAX_POST_AGE * 60)
+
 def fetch_new_posts():
     """
     Fetches newest Reddit posts using Reddit API.
@@ -90,6 +108,10 @@ def fetch_new_posts():
 
         for post in data["data"]["children"]:
             post_data = post["data"]
+
+            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and is_post_recent(post_data["created_utc"]):
+                logging.info("Skipped post because of post age")
+                continue
 
             if is_turnip_related(post_data["title"]):
                 posts.append({
