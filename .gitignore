@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+#Output files:
+seen_posts.json
+
 # C extensions
 *.so
 
