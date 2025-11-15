@@ -22,5 +22,4 @@ Then you can run the app by doing:
 ```
 
 ## TODO:
-- Finish the app...
 - Add support for more than one subreddit
