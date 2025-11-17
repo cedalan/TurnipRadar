@@ -25,3 +25,4 @@ Then you can run the app by doing:
 - Add support for more than one subreddit
 - Add config file with user stuff: `DO_DAISY_MAE_CHECK`, `ONLY_SEND_NOTIFICATION_IF_REALLY_NEW` and etc.
 - bug: posts are not appended if they are skipped, so they will be checked upon restart even if they were skipped. Solve by moving `is_post_recent-check` to `check_for_new_posts`
+- bug: If a post changes title notification is sent again
