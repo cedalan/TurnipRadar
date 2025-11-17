@@ -87,7 +87,7 @@ def is_post_recent(created_time):
     post_time = datetime.fromtimestamp(created_time)
     current_time = datetime.now()
     time_diff = current_time - post_time
-    logging.info(f"time_diff: {time_diff.total_seconds()}")
+    logging.info(f"Post age: {time_diff.total_seconds() / 60} minutes")
     return time_diff.total_seconds() >= (MAX_POST_AGE * 60)
 
 def fetch_new_posts():
