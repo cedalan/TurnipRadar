@@ -23,3 +23,4 @@ Then you can run the app by doing:
 
 ## TODO:
 - Add support for more than one subreddit
+- Add config file with user stuff: DO_DAISY_MAE_CHECK, ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and etc.
