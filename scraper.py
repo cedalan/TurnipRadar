@@ -109,16 +109,13 @@ def fetch_new_posts():
         for post in data["data"]["children"]:
             post_data = post["data"]
 
-            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and is_post_recent(post_data["created_utc"]):
-                logging.info("Skipped post because of post age")
-                continue
-
             if is_turnip_related(post_data["title"]):
                 posts.append({
                     "id": post_data["id"],
                     "title": post_data["title"],
                     "url": f"https://reddit.com{post_data["permalink"]}",
-                    "author": post_data["author"]
+                    "author": post_data["author"],
+                    "created_utc": post_data["created_utc"]
                 })
         return posts
     
@@ -151,6 +148,11 @@ def check_for_new_posts():
 
         for post in unseen_posts:
             logging.info(f"New post: {post["title"]}")
+
+            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and is_post_recent(post["created_utc"]):
+                logging.info("Skipped post because of post age")
+                seen_posts.add(post["id"])
+                continue
             
             # Send notification via pushover
             send_notification(
