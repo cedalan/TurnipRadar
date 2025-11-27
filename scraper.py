@@ -76,6 +76,25 @@ def is_turnip_related(title):
 
     return any(keyword in title_lower for keyword in keywords)
 
+def get_post_age_pretty(time_diff):
+    """
+    Returns a pretty version of post age, converted to cleanest time-format
+    """
+
+    time_formats = [
+        ("day", 86400),
+        ("hour", 3600),
+        ("minute", 60),
+        ("second", 1)
+    ]
+
+    for time_name, size in time_formats:
+        value = time_diff // size
+
+        if value:
+            return f"{int(value)} {time_name}{"s" if value != 1 else ""}"
+    return "0 seconds (something has probably gone wrong here...)"
+
 def is_post_recent(created_time):
     """
     Checks if post was created withing MAX_POST_AGE minutes
@@ -87,7 +106,7 @@ def is_post_recent(created_time):
     post_time = datetime.fromtimestamp(created_time)
     current_time = datetime.now()
     time_diff = current_time - post_time
-    logging.info(f"Post age: {time_diff.total_seconds() / 60} minutes")
+    logging.info(f"Post age: {get_post_age_pretty(time_diff.total_seconds())}")
     return time_diff.total_seconds() >= (MAX_POST_AGE * 60)
 
 def fetch_new_posts():
