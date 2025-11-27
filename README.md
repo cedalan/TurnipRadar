@@ -1,5 +1,5 @@
 # TurnipRadar
-TurnipRadar is a python app that scrapes r/TurnipExchange for any new posts, and sends a notification to your phone with a link to the reddit post, so that you can queue up to sell turnips as fast as possible. 
+TurnipRadar is a python app that uses the Reddit API to check r/TurnipExchange for any new posts related to selling or buying turnips. It sends a notification to your phone with a link to the reddit post, so that you can queue up to sell turnips as fast as possible. 
 
 ## How to run:
 Requires python to run!
