@@ -19,15 +19,11 @@ logging.basicConfig(
 YOUR_NAME = os.getenv("YOUR_NAME")
 REDDIT_API_URL = "https://www.reddit.com/r/TurnipExchange/new.json"
 HEADERS = {"User-Agent": f"TurnipNotifierBot/0.1 by {YOUR_NAME}"}
-SEEN_FILE = "seen_posts.json"
-CHECK_INTERVAL = 120 #How many seconds between each check
-
-#Set this to false if you do not want to check for posts about daisy mae selling turnips
-DO_DAISY_MAE_CHECK = True
-
-#Set til to true if you only want to send notification for posts under max age
-ONLY_SEND_NOTIFICATION_IF_REALLY_NEW = True
-MAX_POST_AGE = 60 #Max post age in minutes
+SEEN_FILE = os.getenv("SEEN_FILE")
+CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL"))
+DO_DAISY_MAE_CHECK = bool(os.getenv("DO_DAISY_MAE_CHECK"))
+ONLY_SEND_NOTIFICATION_IF_REALLY_NEW = bool(os.getenv("ONLY_SEND_NOTIFICATION_IF_REALLY_NEW"))
+MAX_POST_AGE = int(os.getenv("MAX_POST_AGE"))
 
 def load_seen_posts():
     """
@@ -35,9 +31,8 @@ def load_seen_posts():
 
     Returns:
     --------
-    
+    set of all seen posts
     """
-
     try:
         if os.path.exists(SEEN_FILE):
             with open(SEEN_FILE, "r") as f:
@@ -107,7 +102,7 @@ def is_post_recent(created_time):
     current_time = datetime.now()
     time_diff = current_time - post_time
     logging.info(f"Post age: {get_post_age_pretty(time_diff.total_seconds())}")
-    return time_diff.total_seconds() >= (MAX_POST_AGE * 60)
+    return time_diff.total_seconds() <= (MAX_POST_AGE * 60)
 
 def fetch_new_posts():
     """
@@ -168,7 +163,7 @@ def check_for_new_posts():
         for post in unseen_posts:
             logging.info(f"New post: {post["title"]}")
 
-            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and is_post_recent(post["created_utc"]):
+            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and not is_post_recent(post["created_utc"]):
                 logging.info("Skipped post because of post age")
                 seen_posts.add(post["id"])
                 continue
