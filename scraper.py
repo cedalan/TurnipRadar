@@ -107,7 +107,7 @@ def is_post_recent(created_time):
     current_time = datetime.now()
     time_diff = current_time - post_time
     logging.info(f"Post age: {get_post_age_pretty(time_diff.total_seconds())}")
-    return time_diff.total_seconds() >= (MAX_POST_AGE * 60)
+    return time_diff.total_seconds() <= (MAX_POST_AGE * 60)
 
 def fetch_new_posts():
     """
@@ -168,7 +168,7 @@ def check_for_new_posts():
         for post in unseen_posts:
             logging.info(f"New post: {post["title"]}")
 
-            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and is_post_recent(post["created_utc"]):
+            if ONLY_SEND_NOTIFICATION_IF_REALLY_NEW and not is_post_recent(post["created_utc"]):
                 logging.info("Skipped post because of post age")
                 seen_posts.add(post["id"])
                 continue
