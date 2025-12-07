@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from notifier import send_notification
 
-load_dotenv()
+load_dotenv(".env")
 
 #Configure logger
 logging.basicConfig(
@@ -21,8 +21,8 @@ REDDIT_API_URL = "https://www.reddit.com/r/TurnipExchange/new.json"
 HEADERS = {"User-Agent": f"TurnipNotifierBot/0.1 by {YOUR_NAME}"}
 SEEN_FILE = os.getenv("SEEN_FILE")
 CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL"))
-DO_DAISY_MAE_CHECK = bool(os.getenv("DO_DAISY_MAE_CHECK"))
-ONLY_SEND_NOTIFICATION_IF_REALLY_NEW = bool(os.getenv("ONLY_SEND_NOTIFICATION_IF_REALLY_NEW"))
+DO_DAISY_MAE_CHECK = os.getenv("DO_DAISY_MAE_CHECK").lower() == "true"
+ONLY_SEND_NOTIFICATION_IF_REALLY_NEW = os.getenv("ONLY_SEND_NOTIFICATION_IF_REALLY_NEW").lower() == "true"
 MAX_POST_AGE = int(os.getenv("MAX_POST_AGE"))
 
 def load_seen_posts():
@@ -65,6 +65,7 @@ def is_turnip_related(title):
     keywords = ["turnip", "turnips", "buying", "price", "bells", "nook", "cranny", "timmy", "tommy"]
 
     if DO_DAISY_MAE_CHECK:
+        keywords.clear()
         keywords.append("daisy")
         keywords.append("mae")
         keywords.append("selling")
