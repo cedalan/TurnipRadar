@@ -4,11 +4,24 @@ TurnipRadar is a python app that uses the Reddit API to check r/TurnipExchange f
 ## How to run:
 Requires python to run!
 
-Create a .env file containing info like this:
+Rename .env.example to .env, which will look like this:
 ```bash
 USER_PUSHOVER_KEY = "Your pushover key goes here"
 API_TOKEN = "Your pushover api token goes here"
 YOUR_NAME = "Your name/username/nickname goes here"
+
+# How many seconds between each scrape
+CHECK_INTERVAL=120
+
+# Set this to true if you also want to check for posts about Daisy Mae selling turnips
+DO_DAISY_MAE_CHECK=True
+
+# Set this to true if you only want to send notifications if post age is under MAX_POST_AGE minutes
+ONLY_SEND_NOTIFICATION_IF_REALLY_NEW=True
+MAX_POST_AGE=60
+
+# Name of the file containing your seen posts
+SEEN_FILE=seen_posts.json
 ```
 
 Then you run this to give the startup script execution permissions:
