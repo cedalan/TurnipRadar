@@ -24,4 +24,4 @@ else
 fi
 
 #Start scraper
-python scraper.py
+python src/scraper.py
